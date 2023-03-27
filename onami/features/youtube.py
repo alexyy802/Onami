@@ -12,28 +12,28 @@ The onami youtube-dl command.
 """
 
 import nextcord
-import youtube_dl
+import yt_dlp
 from nextcord.ext import commands
 
 from onami.features.baseclass import Feature
 from onami.features.voice import VoiceFeature
 
 BASIC_OPTS = {
-    'format': 'webm[abr>0]/bestaudio/best',
-    'prefer_ffmpeg': True,
-    'quiet': True
+    "format": "webm[abr>0]/bestaudio/best",
+    "prefer_ffmpeg": True,
+    "quiet": True,
 }
 
 
 class BasicYouTubeDLSource(nextcord.FFmpegPCMAudio):
     """
-    Basic audio source for youtube_dl-compatible URLs.
+    Basic audio source for yt_dlp-compatible URLs.
     """
 
     def __init__(self, url, download: bool = False):
-        ytdl = youtube_dl.YoutubeDL(BASIC_OPTS)
+        ytdl = yt_dlp.YoutubeDL(BASIC_OPTS)
         info = ytdl.extract_info(url, download=download)
-        super().__init__(info['url'])
+        super().__init__(info["url"])
 
 
 class YouTubeFeature(Feature):
@@ -41,10 +41,12 @@ class YouTubeFeature(Feature):
     Feature containing the youtube-dl command
     """
 
-    @Feature.Command(parent="oni_voice", name="youtube_dl", aliases=["youtubedl", "ytdl", "yt"])
+    @Feature.Command(
+        parent="oni_voice", name="youtube_dl", aliases=["youtubedl", "ytdl", "yt"]
+    )
     async def oni_vc_youtube_dl(self, ctx: commands.Context, *, url: str):
         """
-        Plays audio from youtube_dl-compatible sources.
+        Plays audio from yt-dlp-compatible sources.
         """
 
         if await VoiceFeature.connected_check(ctx):
